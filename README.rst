@@ -184,6 +184,31 @@ Features
        '7a7b+']
       >>> kif['win']
       'b'
+      
+* Find files with draw results
+
+  .. code:: python
+  
+    import os
+    import glob
+    import shogi.KIF
+
+    def main():
+        folder = 'C:\\Users\\username\\Documents\\shogi\\YaneuraOu-GodWhale\\*.kif'
+        num_draw_games = 0
+
+        for f in glob.glob(folder):
+            filename = os.path.basename(f)
+
+            kif = shogi.KIF.Parser.parse_file(f)[0]
+            if kif['win'] == 'bw':
+                print(filename)
+                num_draw_games += 1
+
+        print('num_draw_games: {}'.format(num_draw_games))
+
+    if __name__ == '__main__':
+        main()
 
 * Communicate with a CSA protocol.
 
