@@ -142,11 +142,12 @@ class Parser:
         moves = []
         last_to_square = None
         win = None
+        check_with_repetition = None
         kif_str = kif_str.replace('\r\n', '\n').replace('\r', '\n')
         for line in kif_str.split('\n'):
             if len(line) == 0 or line[0] == "*":
                 if len(line) > 0 and line[0] == '*' and line in Parser.CHECK_REP:
-                    result_comment = Parser.CHECK_REP[line]
+                    check_with_repetition = Parser.CHECK_REP[line]
             elif '\uff1a' in line:
                 (key, value) = line.split('\uff1a', 1)
                 value = value.rstrip('\u3000')
@@ -198,8 +199,8 @@ class Parser:
             line_no += 1
 
         # Result based on Shogidokoro's comment on check with repetition.
-        if win == '-' and result_comment is not None:
-            win = result_comment
+        if win == '-' and check_with_repetition is not None:
+            win = check_with_repetition
 
         summary = {
             'names': names,
