@@ -186,7 +186,14 @@ class Parser:
                             win = 'w'
                         else:
                             # TODO: repetition of moves with continuous check
+                            # win value of '-' is undefined.
                             win = '-'
+                            # Result comment from ShogiGUI and Shogidokoro as a draw from kif output
+                            if '手で千日手' in line:
+                                win = 'bw'
+                            # Result comment from Shogidokoro as a draw from kif output
+                            elif '手で持将棋' in line:
+                                win = 'bw'
                     # If there is no match from RESULT_RE
                     else:
                         # kif output from Shogidokoro v4.3.2 GUI, on illegal move.
