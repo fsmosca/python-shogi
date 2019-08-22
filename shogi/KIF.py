@@ -50,10 +50,6 @@ class Parser:
 
     RESULT_RE = re.compile(r'\u3000*\u307e\u3067(\d+)\u624b\u3067((\u5148|\u4e0b|\u5f8c|\u4e0a)\u624b\u306e\u52dd\u3061|\u5343\u65e5\u624b|\u6301\u5c06\u68cb|\u4e2d\u65ad)')
 
-    # Shogidokoro's result comment on check with repetitions.
-    CHECK_REP = {'*Sente wins by consecutive check repetition.': 'b',
-                 '*Gote wins by consecutive check repetition.': 'w'}
-
     @staticmethod
     def parse_file(path):
         prefix, ext = os.path.splitext(path)
@@ -142,12 +138,10 @@ class Parser:
         moves = []
         last_to_square = None
         win = None
-        result_comment = None
         kif_str = kif_str.replace('\r\n', '\n').replace('\r', '\n')
         for line in kif_str.split('\n'):
             if len(line) == 0 or line[0] == "*":
-                if len(line) > 0 and line[0] == '*' and line in Parser.CHECK_REP:
-                    result_comment = Parser.CHECK_REP[line]
+                pass
             elif '\uff1a' in line:
                 (key, value) = line.split('\uff1a', 1)
                 value = value.rstrip('\u3000')
@@ -197,10 +191,6 @@ class Parser:
                         elif '手で先手の反則負け' in line:
                             win = 'w'
             line_no += 1
-
-        # Result based on Shogidokoro's comment on check with repetition.
-        if win == '-' and result_comment is not None:
-            win = result_comment
 
         summary = {
             'names': names,
