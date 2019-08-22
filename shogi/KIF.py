@@ -181,6 +181,15 @@ class Parser:
                         else:
                             # TODO: repetition of moves with continuous check
                             win = '-'
+                    # If there is no match from RESULT_RE
+                    else:
+                        # kif output from Shogidokoro v4.3.2 GUI, on illegal move.
+                        # 2nd player loses
+                        if '手で後手の反則負け' in line:
+                            win = 'b'
+                        # First player loses
+                        elif '手で先手の反則負け' in line:
+                            win = 'w'
             line_no += 1
 
         summary = {
