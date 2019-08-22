@@ -54,8 +54,17 @@ class Parser:
     def parse_file(path):
         prefix, ext = os.path.splitext(path)
         enc = 'utf-8' if ext == '.kifu' else 'cp932'
-        with codecs.open(path, 'r', enc) as f:
-            return Parser.parse_str(f.read())
+        try:
+            # kif from ShogiGUI, use cp932
+            with codecs.open(path, 'r', enc) as f:
+                return Parser.parse_str(f.read())
+        except UnicodeDecodeError:
+            # kif from Shogidokoro, use utf-8
+            with codecs.open(path, 'r', 'utf-8' if enc == 'cp932' else 'cp932') as f:
+                return Parser.parse_str(f.read())
+        except Exception as e:
+            print('Unexpected exception:', e)
+            raise
 
     @staticmethod
     def parse_pieces_in_hand(target):
