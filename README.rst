@@ -185,7 +185,7 @@ Features
       >>> kif['win']
       'b'
       
-* Find files with draw results
+* Print kif files with draw results
 
   .. code:: python
   
@@ -194,15 +194,13 @@ Features
     import shogi.KIF
 
     def main():
-        folder = 'C:\\Users\\username\\Documents\\shogi\\YaneuraOu-GodWhale\\*.kif'
+        folder = 'C:\\Documents\\shogi\\YaneuraOu-GodWhale\\*.kif'
         num_draw_games = 0
 
         for f in glob.glob(folder):
-            filename = os.path.basename(f)
-
             kif = shogi.KIF.Parser.parse_file(f)[0]
             if kif['win'] == 'bw':
-                print(filename)
+                print(os.path.basename(f))
                 num_draw_games += 1
 
         print('num_draw_games: {}'.format(num_draw_games))
