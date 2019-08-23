@@ -137,7 +137,7 @@ class Parser:
 
         names = [None, None]
         pieces_in_hand = [{}, {}]
-        current_turn = shogi.BLACK
+        start_turn = shogi.BLACK
         sfen = shogi.STARTING_SFEN
         moves = []
         last_to_square = None
@@ -170,8 +170,7 @@ class Parser:
                     if sfen is None:
                         raise ParserException('Cannot support handycap type "other"')
             elif line == '\u5f8c\u624b\u756a':
-                # Current turn is white
-                current_turn = shogi.WHITE
+                start_turn = shogi.WHITE
             else:
                 (move, last_to_square) = Parser.parse_move_str(line, last_to_square)
                 if move is not None:
@@ -210,6 +209,11 @@ class Parser:
         # Result based on Shogidokoro's comment on check with repetition.
         if win == '-' and check_with_repetition is not None:
             win = check_with_repetition
+            
+        # Change sfen if start side to move is white and the position is from starting sfen.
+        if start_turn == shogi.WHITE and sfen.split()[1] == 'b' and \
+                shogi.STARTING_SFEN.split()[0] == sfen.split()[0]:
+            sfen = sfen.split()[0] + ' w - 1'
 
         summary = {
             'names': names,
