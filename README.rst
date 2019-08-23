@@ -185,7 +185,7 @@ Features
       >>> kif['win']
       'b'
       
-* Print kif files with draw results
+* Print kif filename with draw result.
 
   .. code:: python
   
